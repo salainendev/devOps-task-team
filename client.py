@@ -9,7 +9,7 @@ class Client:
     def __init__(self, name):
         self.name = name
         self.client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.client_socket.connect(('192.168.2.111', 8080))
+        self.client_socket.connect(('127.0.0.1', 5555))
         self.receive_messages_worker = threading.Thread(target=self.receive_messages)
         self.id = None
         self.alive=True
@@ -22,18 +22,18 @@ class Client:
         self.id = response.split()[-1]
         self.receive_messages_worker.start()
         print(f"Registered with ID: {self.id}")
-
+        return 200
     def send_message(self, recipient_name, message):
         
         self.client_socket.send(bytearray(f"SEND {recipient_name} {message}".encode()))
-
+        return 200
     def receive_messages(self):
         while self.alive:
             response = ((self.client_socket.recv(1024))).decode()
             if response:
                 with threading.Lock():
                     print("Message received:", response ,'\n')
-
+                    
     def stop(self):
         self.alive = False
         self.client_socket.send(bytearray(f'OFFLINE {self.name}'.encode()))

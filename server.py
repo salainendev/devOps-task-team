@@ -26,7 +26,7 @@ router = RoutingTable()
 class Server:
     def __init__(self):
         self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.server_socket.bind(('192.168.2.111', 8080))
+        self.server_socket.bind(('127.0.0.1', 5555))
         self.server_socket.listen(5)
         print("Server started")
         self.clients = {}
@@ -83,6 +83,11 @@ class Server:
         self.stop()
     
 if __name__ == '__main__':
+    server = Server()
+    server.start()
+    server.stop()
+
+def startServ():
     server = Server()
     server.start()
     server.stop()
